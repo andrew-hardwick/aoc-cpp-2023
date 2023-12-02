@@ -2,4 +2,7 @@
 **/rel/*
 **/build/*
 
-**/*.txt
+input/*
+
+**/venv/*
+

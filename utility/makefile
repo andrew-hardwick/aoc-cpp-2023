@@ -4,13 +4,13 @@
 
 CXX := g++
 CXX_FLAGS := -Wall -O2 -std=c++17
-LD_FLAGS := -lssl -lcrypto
 
 # Manual Configuration
 
 NAME = aocUtility
 
 SRC_DIR := ./src
+INC_DIRS := ./inc
 OBJ_DIR := ./obj
 REL_DIR := ./rel
 
@@ -18,6 +18,8 @@ REL_DIR := ./rel
 
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
+
+INC_FLAGS := $(patsubst %,-I%,$(INC_DIRS))
 
 # Recipes
 
@@ -27,7 +29,7 @@ all: $(OBJ_FILES) $(REL_INC) | $(REL_DIR)
 	ar -rc $(REL_DIR)/lib$(NAME).a $(OBJ_FILES)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	$(CXX) $(CXX_FLAGS) -c -o $@ $<
+	$(CXX) $(CXX_FLAGS) $(INC_FLAGS) -c -o $@ $<
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
