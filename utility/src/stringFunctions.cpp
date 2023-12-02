@@ -29,6 +29,15 @@ namespace aocUtility { namespace string
 		return result;
 	}
 
+	std::vector<std::string> splitByDelimiter(
+			std::string source,
+			char delimiter)
+	{
+		std::string delimiterString { delimiter };
+
+		return splitByDelimiter(source, delimiterString);
+	}
+
 	std::string replace(
 			std::string source,
 			std::string target,

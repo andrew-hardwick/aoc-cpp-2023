@@ -10,6 +10,10 @@ namespace aocUtility { namespace string
 			std::string source,
 			std::string delimiter);
 
+	std::vector<std::string> splitByDelimiter(
+			std::string source,
+			char delimiter);
+
 	std::string replace(
 			std::string source,
 			std::string target,
