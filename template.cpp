@@ -6,8 +6,10 @@
 typedef int primary;
 
 primary parse(
+//std::vector<primary> parse(
 		char c)
 //		std::string line)
+//		const std::vector<std::string>& file)
 {
 	return 0;
 }
@@ -32,6 +34,7 @@ int main(
 
 	auto parser = aocUtility::createParserForChar<primary>(parse);
 //	auto parser = aocUtility::createParserForLine<primary>(parse);
+//	auto parser = aocUtility::createParserForFile<primary>(parse);
 
 	aocUtility::execute<primary>(filename, parser, partOne, partTwo);
 

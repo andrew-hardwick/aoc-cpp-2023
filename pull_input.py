@@ -9,9 +9,6 @@ from aocd import get_data
 def main(
         year,
         day):
-    if not os.path.exists(str(year)):
-        os.mkdir(str(year))
-
     day_str = str(day).zfill(2)
 
     print('pulling', year, day_str)
@@ -23,7 +20,7 @@ def main(
 
     data = get_data(day=day, year=year)
 
-    with open(os.path.join(input_folder, f'{day_str}_input'), 'w') as f:
+    with open(os.path.join(input_folder, f'{year}_{day_str}_input'), 'w') as f:
         f.write(data)
 
     print(year, day, 'pulled successfully')

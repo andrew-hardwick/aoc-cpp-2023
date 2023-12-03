@@ -76,4 +76,24 @@ namespace aocUtility
 		};
 	}
 
+	template <class T>
+	std::function<std::vector<T>(std::string)> createParserForFile(
+			std::function<std::vector<T>(const std::vector<std::string>)> fileParser)
+	{
+		return [fileParser = std::move(fileParser)] (std::string source)
+		{
+			std::vector<std::string> rawSource;
+
+			std::stringstream inss(source);
+
+			std::string line;
+
+			while (std::getline(inss, line))
+			{
+				rawSource.push_back(line);
+			}
+
+			return fileParser(rawSource);
+		};
+	}
 }
