@@ -21,6 +21,7 @@ namespace aocUtility
 
 		if (inf.fail())
 		{
+			std::cout << "Unable to open input file: " << filename << "\n";
 			return;
 		}
 
