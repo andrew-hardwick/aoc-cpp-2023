@@ -7,54 +7,37 @@
 #include <string>
 
 
-typedef std::pair<std::vector<int>, std::vector<int>> primary;
+typedef std::pair<std::vector<std::string>, std::vector<std::string>> primary;
 
 primary parse(
 		std::string line)
 {
-	auto splitLine = aocUtility::string::splitByDelimiter(line, ": ");
+	auto splitLine = aocUtility::string::splitByDelimiter(line, ":");
 
-	auto cardSource = aocUtility::string::replace(splitLine[1], "  ", " ");
+	auto splitSource = aocUtility::string::splitByDelimiter(splitLine[1], " |");
 
-	cardSource = aocUtility::string::trim(cardSource);
-
-	auto splitSource = aocUtility::string::splitByDelimiter(cardSource, " | ");
-
-	auto winningNumberSource = aocUtility::string::splitByDelimiter(splitSource[0], " ");
-	auto myNumberSource = aocUtility::string::splitByDelimiter(splitSource[1], " ");
-
-	std::vector<int> winningNumbers;
-
-	for (auto n : winningNumberSource)
-	{
-		winningNumbers.push_back(std::stoi(n));
-	}
-
-	std::vector<int> myNumbers;
-
-	for (auto n : myNumberSource)
-	{
-		myNumbers.push_back(std::stoi(n));
-	}
+	auto winningNumbers = aocUtility::string::getSubstringsOfLength(splitSource[0], 3);
+	auto myNumbers = aocUtility::string::getSubstringsOfLength(splitSource[1], 3);
 
 	return std::make_pair(winningNumbers, myNumbers);
 }
 
+template <class T>
 std::size_t getMatchingCount(
-		std::vector<int> winningNumbers,
-		std::vector<int> myNumbers)
+		std::vector<T> a,
+		std::vector<T> b)
 {
-		std::vector<int> numbersUnion;
+		std::vector<T> aBUnion;
 
-		for (auto e : winningNumbers)
+		for (auto e : a)
 		{
-			if (std::find(myNumbers.begin(), myNumbers.end(), e) != myNumbers.end())
+			if (std::find(b.begin(), b.end(), e) != b.end())
 			{
-				numbersUnion.push_back(e);
+				aBUnion.push_back(e);
 			}
 		}
 
-		return numbersUnion.size();
+		return aBUnion.size();
 }
 
 std::string partOne(
@@ -68,7 +51,7 @@ std::string partOne(
 
 		if (size > 0)
 		{
-			result += (int) pow(2, size - 1);
+			result += 1 << (size - 1);
 		}
 	}
 

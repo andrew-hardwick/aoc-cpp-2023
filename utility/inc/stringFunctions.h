@@ -19,6 +19,10 @@ namespace aocUtility { namespace string
 			std::string target,
 			std::string replacement);
 
+	std::vector<std::string> getSubstringsOfLength(
+			std::string source,
+			std::size_t length);
+
 	std::string& ltrim(
 			std::string& s);
 

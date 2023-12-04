@@ -63,6 +63,26 @@ namespace aocUtility { namespace string
 
 		return builder.str();
 	}
+
+	std::vector<std::string> getSubstringsOfLength(
+			std::string source,
+			std::size_t length)
+	{
+		std::vector<std::string> result;
+
+		while (source.size() > length)
+		{
+			auto portion = source.substr(0, length);
+
+			result.push_back(portion);
+
+			source = source.substr(length);
+		}
+		
+		result.push_back(source);
+
+		return result;
+	}
 	
 	const char* ws = " \t\n\r\f\v";
 
