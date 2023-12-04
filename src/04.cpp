@@ -99,9 +99,6 @@ std::string partTwo(
 		{
 			cardCounts.at(j + i) += currentCount;
 		}
-
-
-
 	}
 
 	return std::to_string(totalCardCount);
