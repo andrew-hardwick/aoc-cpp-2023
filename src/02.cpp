@@ -114,7 +114,7 @@ int main(
 		int argc,
 		char** argv)
 {
-	auto filename = "input/02_input";
+	auto filename = "input/2023_02_input";
 
 	auto parser = aocUtility::createParserForLine<primary>(parse);
 

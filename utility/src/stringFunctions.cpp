@@ -2,7 +2,6 @@
 
 #include <sstream>
 
-
 namespace aocUtility { namespace string
 {
 	std::vector<std::string> splitByDelimiter(
@@ -45,11 +44,16 @@ namespace aocUtility { namespace string
 	{
 		auto split = splitByDelimiter(source, target);
 
+		if (split.size() == 1)
+		{
+			return source;
+		}
+
 		std::stringstream builder;
 
 		std::vector<std::string> partial(split.begin(), split.end() - 1);
 
-		for (auto e : split)
+		for (auto e : partial)
 		{
 			builder << e;
 			builder << replacement;
@@ -58,5 +62,27 @@ namespace aocUtility { namespace string
 		builder << *(split.end() - 1);
 
 		return builder.str();
+	}
+	
+	const char* ws = " \t\n\r\f\v";
+
+	std::string& rtrim(
+			std::string& s)
+	{
+			s.erase(s.find_last_not_of(ws) + 1);
+			return s;
+	}
+
+	std::string& ltrim(
+			std::string& s)
+	{
+			s.erase(0, s.find_first_not_of(ws));
+			return s;
+	}
+
+	std::string& trim(
+			std::string& s)
+	{
+			return ltrim(rtrim(s));
 	}
 } }

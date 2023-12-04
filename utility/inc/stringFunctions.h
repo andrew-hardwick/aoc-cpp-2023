@@ -18,5 +18,14 @@ namespace aocUtility { namespace string
 			std::string source,
 			std::string target,
 			std::string replacement);
+
+	std::string& ltrim(
+			std::string& s);
+
+	std::string& rtrim(
+			std::string& s);
+
+	std::string& trim(
+			std::string& s);
 } }
 
