@@ -59,7 +59,7 @@ primary parse(
 }
 
 std::vector<std::pair<std::size_t, std::size_t>> applyMap(
-		const std::vector<std::pair<std::size_t, std::size_t>>& source,
+		std::vector<std::pair<std::size_t, std::size_t>> source,
 		const std::vector<std::vector<std::size_t>>& fullMap)
 {
 	std::vector<std::pair<std::size_t, std::size_t>> result;
@@ -101,9 +101,13 @@ std::vector<std::pair<std::size_t, std::size_t>> applyMap(
 			{
 				// overlapping both sides
 
-				result.push_back(std::make_pair(start, mapSour - start));
+				source.push_back(std::make_pair(start, mapSour - start));
+				handled.push_back(false);
+
 				result.push_back(std::make_pair(mapDest, mapLeng));
-				result.push_back(std::make_pair(mapEnd + 1, last - mapEnd));
+
+				source.push_back(std::make_pair(mapEnd + 1, last - mapEnd));
+				handled.push_back(false);
 
 				handledThisCycle = true;
 			}
@@ -112,7 +116,9 @@ std::vector<std::pair<std::size_t, std::size_t>> applyMap(
 				// overlap to the left
 				auto length1 = mapSour - start;
 
-				result.push_back(std::make_pair(start, length1));
+				source.push_back(std::make_pair(start, length1));
+				handled.push_back(false);
+
 				result.push_back(std::make_pair(mapDest, length - length1));
 				handledThisCycle = true;
 			}
@@ -122,25 +128,16 @@ std::vector<std::pair<std::size_t, std::size_t>> applyMap(
 				auto length1 = mapEnd + 1 - start;
 
 				result.push_back(std::make_pair(start + mapDest - mapSour, length1));
-				result.push_back(std::make_pair(mapEnd + 1, length - length1));
+
+				source.push_back(std::make_pair(mapEnd + 1, length - length1));
+				handled.push_back(false);
+
 				handledThisCycle = true;
 			}
 
 			if (handledThisCycle)
 			{
 				handled.at(i) = true;
-			}
-
-			if (mapSour == 262282387 && handledThisCycle)
-			{
-				std::cout << "map info: " << mapDest << " " << mapSour << " " << mapEnd << "\n";
-				std::cout << "seed info: " << start << " " << last << "\n";
-
-				if (start < mapSour && last > mapEnd)
-				{
-					std::cout << "reverse encapsulated\n";
-				}
-
 			}
 		}
 	}
