@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <iostream>
 #include <fstream>
 #include <functional>
@@ -32,11 +33,24 @@ namespace aocUtility
 		// parse
 		std::vector<T> parsed = parser(raw);
 
+		auto timeA = std::chrono::steady_clock::now();
+
+		std::string partOneResult = partOne(parsed);
+
+		auto timeB = std::chrono::steady_clock::now();
+
+		std::string partTwoResult = partTwo(parsed);
+
+		auto timeC = std::chrono::steady_clock::now();
+
+		auto durationPartOne = std::chrono::duration_cast<std::chrono::microseconds>(timeB - timeA).count();
+		auto durationPartTwo = std::chrono::duration_cast<std::chrono::microseconds>(timeC - timeB).count();
+
 		// execute (and print) part one
-		std::cout << "Part 1: " << partOne(parsed) << "\n";
+		std::cout << "Part 1: " << partOneResult << "\n  - " << durationPartOne << "us\n";
 
 		// execute (and print) part two
-		std::cout << "Part 2: " << partTwo(parsed) << "\n";
+		std::cout << "Part 2: " << partTwoResult << "\n  - " << durationPartTwo << "us\n";
 	}
 
 	template <class T>
