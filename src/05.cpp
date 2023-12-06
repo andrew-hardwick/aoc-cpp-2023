@@ -2,12 +2,9 @@
 
 #include "stringFunctions.h"
 
-#include <algorithm>
-#include <cstddef>
 #include <limits>
-#include <stdexcept>
 #include <string>
-#include <utility>
+#include <vector>
 
 
 typedef std::pair<std::vector<std::size_t>, std::vector<std::vector<std::vector<std::size_t>>>> primary;
@@ -95,6 +92,7 @@ std::vector<std::pair<std::size_t, std::size_t>> applyMap(
 			{
 				// encapsulated
 				result.push_back(std::make_pair(start + mapDest - mapSour, length));
+
 				handledThisCycle = true;
 			}
 			else if (start < mapSour && last > mapEnd)
@@ -120,6 +118,7 @@ std::vector<std::pair<std::size_t, std::size_t>> applyMap(
 				handled.push_back(false);
 
 				result.push_back(std::make_pair(mapDest, length - length1));
+
 				handledThisCycle = true;
 			}
 			else if (start >= mapSour && last >= mapEnd && start <= mapEnd)
@@ -167,28 +166,6 @@ std::size_t getMinSeed(
 	return minSeed;
 }
 
-void testApplyMap()
-{
-	std::vector<std::pair<std::size_t, std::size_t>> seeds;
-
-	seeds.push_back(std::make_pair(10, 10));
-
-	std::vector<std::vector<std::size_t>> allMaps;
-
-	std::vector<std::size_t> testMap1 { 30, 10, 9};
-
-	allMaps.push_back(testMap1);
-
-	auto result = applyMap(seeds, allMaps);
-
-	for (auto [ s, l ] : result)
-	{
-		std::cout << s << " " << l << "\n";
-	}
-
-	throw std::domain_error("stop");
-}
-
 std::string partOne(
 		primary source)
 {
@@ -218,7 +195,6 @@ std::string partTwo(
 
 	for (std::size_t i = 0; i < seedSource.size(); i += 2)
 	{
-		std::cout << seedSource.at(i) << "   " << seedSource.at(i + 1) << "\n";
 		seeds.push_back(std::make_pair(seedSource.at(i), seedSource.at(i + 1)));
 	}
 
