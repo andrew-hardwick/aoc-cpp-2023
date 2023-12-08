@@ -29,18 +29,36 @@ primary parse(
 	return std::make_pair(instructions, graph);
 }
 
-std::string partOne(
-		primary source)
+std::map<std::string, std::size_t> findStepsToEach(
+		std::string start,
+		std::string instructions,
+		std::map<std::string, std::pair<std::string, std::string>> graph,
+		std::vector<std::string> targets)
 {
-	auto [ instructions, graph ] = source;
+	std::size_t targetLength = targets.size();
 
-	std::size_t i = 1;
-	std::string currentNode = "AAA";
+	std::map<std::string, std::size_t> result;
 
-	while(true)
+	std::string currentNode = start;
+	std::size_t stepCount = 1;
+
+	std::vector<std::pair<std::size_t, std::string>> states;
+
+	while (result.size() != targetLength)
 	{
+		std::size_t instructionIndex = 0;
+
 		for (auto c : instructions)
 		{
+			auto state = std::make_pair(instructionIndex, currentNode);
+
+			if (std::find(states.cbegin(), states.cend(), state) != states.cend())
+			{
+				return result;
+			}
+
+			states.push_back(state);
+
 			auto [ left, right ] = graph.at(currentNode);
 
 			if (c == 'L')
@@ -52,14 +70,38 @@ std::string partOne(
 				currentNode = right;
 			}
 
-			if (currentNode == "ZZZ")
+			auto it = std::find(targets.cbegin(), targets.cend(), currentNode);
+			
+			if (it != targets.cend())
 			{
-				return std::to_string(i);
+				result.emplace(std::make_pair(*it, stepCount));
+				
+				targets.erase(it);
 			}
 
-			i++;
+			if (currentNode == start)
+			{
+				return result;
+			}
+
+			instructionIndex++;
+			stepCount++;
 		}
 	}
+
+	return result;
+}
+
+std::string partOne(
+		primary source)
+{
+	auto [ instructions, graph ] = source;
+	std::string start = "AAA";
+	std::vector<std::string> targets { "ZZZ" };
+
+	auto result = findStepsToEach(start, instructions, graph, targets);
+
+	return std::to_string(result.at("ZZZ"));
 }
 
 std::string partTwo(
@@ -67,60 +109,40 @@ std::string partTwo(
 {
 	auto [ instructions, graph ] = source;
 
-	std::size_t i = 1;
+	std::vector<std::string> starts;
+	std::vector<std::string> targets;
 
-	std::vector<std::string> currentNodes;
-
-	for (auto [ node, _ ] : graph)
+	for (auto [ start, _ ] : graph)
 	{
-		if (node[2] == 'A')
+		if (start[2] == 'A')
 		{
-			currentNodes.push_back(node);
+			starts.push_back(start);
+		}
+		if (start[2] == 'Z')
+		{
+			targets.push_back(start);
 		}
 	}
 
-	while(true)
+	std::vector<std::map<std::string, std::size_t>> stepsToEachFromEach;
+
+	for (auto start : starts)
 	{
-		for (auto c : instructions)
-		{
-			bool allOnZ = true;
-
-			for (std::size_t i = 0 ; i < currentNodes.size(); i++)
-			{
-				auto currentNode = currentNodes.at(i);
-
-				std::cout << i << " " << currentNode << "\n";
-				auto [ left, right ] = graph.at(currentNode);
-
-				if (c == 'L')
-				{
-					currentNode = left;
-				}
-				else
-				{
-					currentNode = right;
-				}
-
-				currentNodes.at(i) = currentNode;
-
-				allOnZ &= currentNode[2] == 'Z';
-			}
-
-			if (allOnZ)
-			{
-				return std::to_string(i);
-			}
-
-			i++;
-		}
+		stepsToEachFromEach.push_back(findStepsToEach(start, instructions, graph, targets));
 	}
+
+	for (std::size_t i = 0; i < starts.size(); i++)
+	{
+	}
+
+	return "nonimpl";
 }
 
 int main(
 		int argc,
 		char** argv)
 {
-	auto filename = "input/2023_08_test2";
+	auto filename = "input/2023_08_input";
 
 	auto parser = aocUtility::createWholesaleParserForFile<primary>(parse);
 
