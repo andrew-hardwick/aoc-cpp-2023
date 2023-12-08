@@ -3,9 +3,17 @@
 #include "stringFunctions.h"
 
 #include <map>
+#include <numeric>
+#include <stdexcept>
 #include <string>
 #include <utility>
 
+/***
+ * All inputs appear to be six independent looped graphs
+ * Each start has only one available end
+ * Each start and end pair are the same distance from the
+ *   unifying node in their respective loops
+ ***/
 
 typedef std::pair<std::string, std::map<std::string, std::pair<std::string, std::string>>> primary;
 
@@ -29,36 +37,19 @@ primary parse(
 	return std::make_pair(instructions, graph);
 }
 
-std::map<std::string, std::size_t> findStepsToEach(
+std::size_t findStepsToEnd(
 		std::string start,
 		std::string instructions,
 		std::map<std::string, std::pair<std::string, std::string>> graph,
 		std::vector<std::string> targets)
 {
-	std::size_t targetLength = targets.size();
-
-	std::map<std::string, std::size_t> result;
-
 	std::string currentNode = start;
 	std::size_t stepCount = 1;
 
-	std::vector<std::pair<std::size_t, std::string>> states;
-
-	while (result.size() != targetLength)
+	while(true)
 	{
-		std::size_t instructionIndex = 0;
-
 		for (auto c : instructions)
 		{
-			auto state = std::make_pair(instructionIndex, currentNode);
-
-			if (std::find(states.cbegin(), states.cend(), state) != states.cend())
-			{
-				return result;
-			}
-
-			states.push_back(state);
-
 			auto [ left, right ] = graph.at(currentNode);
 
 			if (c == 'L')
@@ -74,22 +65,14 @@ std::map<std::string, std::size_t> findStepsToEach(
 			
 			if (it != targets.cend())
 			{
-				result.emplace(std::make_pair(*it, stepCount));
-				
-				targets.erase(it);
+				return stepCount;
 			}
 
-			if (currentNode == start)
-			{
-				return result;
-			}
-
-			instructionIndex++;
 			stepCount++;
 		}
 	}
 
-	return result;
+	throw std::domain_error("This exception is unreachable with proper input");
 }
 
 std::string partOne(
@@ -99,9 +82,9 @@ std::string partOne(
 	std::string start = "AAA";
 	std::vector<std::string> targets { "ZZZ" };
 
-	auto result = findStepsToEach(start, instructions, graph, targets);
+	auto result = findStepsToEnd(start, instructions, graph, targets);
 
-	return std::to_string(result.at("ZZZ"));
+	return std::to_string(result);
 }
 
 std::string partTwo(
@@ -124,18 +107,22 @@ std::string partTwo(
 		}
 	}
 
-	std::vector<std::map<std::string, std::size_t>> stepsToEachFromEach;
+	// Each start only has one possible end
+	std::vector<std::size_t> stepsToEnd;
 
 	for (auto start : starts)
 	{
-		stepsToEachFromEach.push_back(findStepsToEach(start, instructions, graph, targets));
+		stepsToEnd.push_back(findStepsToEnd(start, instructions, graph, targets));
 	}
 
-	for (std::size_t i = 0; i < starts.size(); i++)
+	std::size_t result = 1;
+
+	for (auto steps : stepsToEnd)
 	{
+		result = std::lcm(result, steps);
 	}
 
-	return "nonimpl";
+	return std::to_string(result);
 }
 
 int main(
