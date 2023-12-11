@@ -59,6 +59,10 @@ namespace aocUtility
 		friend Point operator-(
 				Point p1,
 				const Point& p2);
+
+		friend Point operator+(
+				Point p1,
+				const Point& p2);
 	};
 }
 

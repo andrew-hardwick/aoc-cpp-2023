@@ -67,18 +67,14 @@ int findNextForwards(
 {
 	auto [ sequence, subSequences ] = data;
 
-	for (auto it = subSequences.rbegin(); it != subSequences.rend() - 1; it++)
+	int total = 0;
+
+	for (auto it = subSequences.rbegin(); it != subSequences.rend(); it++)
 	{
-		auto current = *it;
-		auto& next = *(it + 1);
-
-		auto lastValueLowerLevel = *current.rbegin();
-		auto lastValueNextLevel = *next.rbegin();
-
-		next.push_back(lastValueLowerLevel + lastValueNextLevel);
+		total += *(*it).rbegin();
 	}
 
-	return *(sequence.rbegin()) + *(subSequences.at(0).rbegin());
+	return total;
 }
 
 int findNextBackwards(
