@@ -17,12 +17,15 @@ namespace aocUtility
 		/**
 		 * strange constructor from string
 		 * expects 'x,y' format
+		 * can be wrapped in parenthesis: '(x,y)'
+		 * can have or not have a space 'x, y' or 'x,\ty'
+		 * can have whitespace around or not '  x, y ' or '\tx,y'
 		 */
-		Point(
+		static Point From(
 			const std::string& source);
 
-		int x = 0;
-		int y = 0;
+		const int x = 0;
+		const int y = 0;
 
 		double mag() const;
 
@@ -32,9 +35,9 @@ namespace aocUtility
 		Point shiftX(
 				int value) const;
 
-		friend Point& operator+=(
-				Point& self,
-				const Point& other);
+		friend Point operator+=(
+				const Point& p1,
+				const Point& p2);
 
 		friend std::ostream& operator<<(
 				std::ostream& os,
@@ -57,11 +60,11 @@ namespace aocUtility
 				const Point& p2);
 
 		friend Point operator-(
-				Point p1,
+				const Point& p1,
 				const Point& p2);
 
 		friend Point operator+(
-				Point p1,
+				const Point& p1,
 				const Point& p2);
 	};
 }

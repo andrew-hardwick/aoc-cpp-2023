@@ -11,13 +11,19 @@ namespace aocUtility
 			: x(x), y(y)
 	{}
 
-	Point::Point(
+	Point Point::From(
 		const std::string& source)
 	{
-		auto splitSource = aocUtility::string::splitByDelimiter(source, ',');
+		std::string cleanSource = aocUtility::string::replace(source, "(","");
+		cleanSource = aocUtility::string::replace(cleanSource, ")","");
+		cleanSource = aocUtility::string::trim(cleanSource);
 
-		x = std::stod(splitSource[0]);
-		y = std::stod(splitSource[1]);
+		auto splitSource = aocUtility::string::splitByDelimiter(cleanSource, ',');
+
+		auto x = std::stod(splitSource[0]);
+		auto y = std::stod(splitSource[1]);
+
+		return Point(x, y);
 	}
 
 	double Point::mag() const
@@ -53,14 +59,14 @@ namespace aocUtility
 		return Point(x + value, y);
 	}
 
-	Point& operator+=(
-			Point& self,
-			const Point& other)
+	Point operator+=(
+			const Point& p1,
+			const Point& p2)
 	{
-		self.x += other.x;
-		self.y += other.y;
+		auto x = p1.x + p2.x;
+		auto y = p1.y + p2.y;
 
-		return self;
+		return Point(x, y);
 	}
 
 	std::ostream& operator<<(
@@ -102,14 +108,14 @@ namespace aocUtility
 	}
 
 	Point operator-(
-			Point p1,
+			const Point& p1,
 			const Point& p2)
 	{
 		return Point(p1.x - p2.x, p1.y - p2.y);
 	}
 
 	Point operator+(
-			Point p1,
+			const Point& p1,
 			const Point& p2)
 	{
 		return Point(p1.x + p2.x, p1.y + p2.y);
